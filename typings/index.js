@@ -8,7 +8,7 @@ var fs = require('fs'),
 module.exports = function (grunt) {
     function getAllTypings(config) {
         var unify = new JsonFile(config.unifyPath);
-        var typings = config.includeSelf ? getTypings(config.basePath, unify, true) : [];
+        var typings = getTypings(config.basePath, unify, !!config.includeSelf, !!config.includeDevSelf);
 
         var lib = new Library(unify, new renderer.Standard());
         if (!fs.existsSync(lib.bower.bowerFilepath)) {
@@ -26,13 +26,13 @@ module.exports = function (grunt) {
         grunt.verbose.ok();
         var allTypings = deps
             .reduce(function (agg, cur) {
-                return agg.concat(getTypings(config.basePath, cur.unify, false));
+                return agg.concat(getTypings(config.basePath, cur.unify, true, false));
             }, typings);
         verboseTypings(allTypings);
         return allTypings;
     }
 
-    function getTypings(basePath, unify, isSelf) {
+    function getTypings(basePath, unify, includeSelf, includeDev) {
         if (!unify.exists) {
             grunt.verbose.write('Ignored typings from missing file [')
                 .write(unify.path)
@@ -46,10 +46,11 @@ module.exports = function (grunt) {
             .write(']...');
 
         unify.loadSync();
-        var typings = unify.getValue('typings') || [];
-        if (isSelf) {
+        var typings = [];
+        if (includeSelf)
+            typings = typings.concat(unify.getValue('typings') || []);
+        if (includeDev)
             typings = typings.concat(unify.getValue('devTypings') || []);
-        }
         var unifyDir = path.resolve(path.dirname(unify.path));
         var rv = typings.map(function (typing) {
             return path.relative(basePath, path.join(unifyDir, typing));
@@ -84,6 +85,7 @@ module.exports = function (grunt) {
                 config.unifyPath = path.join(process.cwd(), 'unify.json');
         }
         config.includeSelf = config.includeSelf !== false;
+        config.includeDevSelf = config.includeDevSelf !== false;
         return getAllTypings(config);
     };
 };
