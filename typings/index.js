@@ -33,6 +33,13 @@ module.exports = function (grunt) {
     }
 
     function getTypings(basePath, unify, isSelf) {
+        if (!unify.exists) {
+            grunt.verbose.write('Ignored typings from missing file [')
+                .write(unify.path)
+                .writeln(']');
+            return [];
+        }
+
         grunt.verbose
             .write('Collecting typings from [')
             .write(unify.path)
