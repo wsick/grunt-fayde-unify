@@ -1,9 +1,7 @@
 # grunt-fayde-unify
 Grunt tasks for fayde unify
 
-## Usage
-
-### `typings`
+## typings
 
 `typings(basePath, unifyPath)`
 - basePath - path to resolve resulting typings (default: process.cwd())
