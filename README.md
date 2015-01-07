@@ -3,9 +3,11 @@ Grunt tasks for [fayde unify](https://github.com/bsick7/fayde-unify).
 
 ## typings
 
-`typings(basePath, unifyPath)`
-- basePath - path to resolve resulting typings (default: './')
-- unifyPath - path to resolve current project `unify.json` (default: './unify.json')
+`typings(config)`
+- config
+    - basePath - path to resolve resulting typings (default: './')
+    - unifyPath - path to resolve current project `unify.json` (default: './unify.json')
+    - includeSelf - if true, will include typings from current library (default: true)
 
 If a bower library has a unify.json file with `typings` defined, `unify.typings()` will extract these typings and return a path relative to `basePath`.
 
