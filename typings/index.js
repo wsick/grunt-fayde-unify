@@ -6,9 +6,9 @@ var fs = require('fs'),
     Library = unify.Library;
 
 module.exports = function (grunt) {
-    function getAllTypings(basePath, unifyPath) {
-        var unify = new JsonFile(unifyPath);
-        var typings = getTypings(basePath, unify, true);
+    function getAllTypings(config) {
+        var unify = new JsonFile(config.unifyPath);
+        var typings = config.includeSelf ? getTypings(config.basePath, unify, true) : [];
 
         var lib = new Library(unify, new renderer.Standard());
         if (!fs.existsSync(lib.bower.bowerFilepath)) {
@@ -26,7 +26,7 @@ module.exports = function (grunt) {
         grunt.verbose.ok();
         var allTypings = deps
             .reduce(function (agg, cur) {
-                return agg.concat(getTypings(basePath, cur.unify, false));
+                return agg.concat(getTypings(config.basePath, cur.unify, false));
             }, typings);
         verboseTypings(allTypings);
         return allTypings;
@@ -75,14 +75,16 @@ module.exports = function (grunt) {
             .writeln(grunt.log.wordlist(typings, {separator: ', ', color: 'cyan'}));
     }
 
-    return function (basePath, unifyPath) {
-        basePath = basePath || "";
-        if (unifyPath == null) {
-            unifyPath = basePath;
-            if (!unifyPath)
-                unifyPath = path.join(process.cwd(), 'unify.json');
+    return function (config) {
+        config = config || {};
+        config.basePath = config.basePath || "";
+        if (config.unifyPath == null) {
+            config.unifyPath = config.basePath;
+            if (!config.unifyPath)
+                config.unifyPath = path.join(process.cwd(), 'unify.json');
         }
-        return getAllTypings(basePath, unifyPath);
+        config.includeSelf = config.includeSelf !== false;
+        return getAllTypings(config);
     };
 };
 
