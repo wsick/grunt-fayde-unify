@@ -82,7 +82,7 @@ module.exports = function (grunt) {
             if (!unifyPath)
                 unifyPath = path.join(process.cwd(), 'unify.json');
         }
-        getAllTypings(basePath, unifyPath);
+        return getAllTypings(basePath, unifyPath);
     };
 };
 
