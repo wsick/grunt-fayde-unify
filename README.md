@@ -4,7 +4,7 @@ Grunt tasks for [fayde unify](https://github.com/bsick7/fayde-unify).
 ## typings
 
 `typings(config)`
-- config
+- config (optional)
     - basePath - path to resolve resulting typings (default: './')
     - unifyPath - path to resolve current project `unify.json` (default: './unify.json')
     - includeSelf - if true, will include typings from current library (default: true)
