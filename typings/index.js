@@ -6,6 +6,32 @@ var fs = require('fs'),
     Library = unify.Library;
 
 module.exports = function (grunt) {
+    function getAllTypings(basePath, unifyPath) {
+        var unify = new JsonFile(unifyPath);
+        var typings = getTypings(basePath, unify, true);
+
+        var lib = new Library(unify, new renderer.Standard());
+        if (!fs.existsSync(lib.bower.bowerFilepath)) {
+            grunt.verbose.write('Could not find bower file [')
+                .write(lib.bower.bowerFilepath)
+                .writeln('].');
+            verboseTypings(typings);
+            return typings;
+        }
+
+        grunt.verbose.write('Collecting bower dependencies from [')
+            .write(lib.bower.bowerFilepath)
+            .write(']...');
+        var deps = unique(getAllDependencies(lib));
+        grunt.verbose.ok();
+        var allTypings = deps
+            .reduce(function (agg, cur) {
+                return agg.concat(getTypings(basePath, cur.unify, false));
+            }, typings);
+        verboseTypings(allTypings);
+        return allTypings;
+    }
+
     function getTypings(basePath, unify, isSelf) {
         grunt.verbose
             .write('Collecting typings from [')
@@ -43,32 +69,13 @@ module.exports = function (grunt) {
     }
 
     return function (basePath, unifyPath) {
-        unifyPath = unifyPath == null ? basePath : unifyPath;
-        var unifyDir = unifyPath == null ? process.cwd() : unifyPath;
-        var unify = new JsonFile(path.join(unifyDir, 'unify.json'));
-
-        var typings = getTypings(basePath, unify, true);
-
-        var lib = new Library(unify, new renderer.Standard());
-        if (!fs.existsSync(lib.bower.bowerFilepath)) {
-            grunt.verbose.write('Could not find bower file [')
-                .write(lib.bower.bowerFilepath)
-                .writeln('].');
-            verboseTypings(typings);
-            return typings;
+        basePath = basePath || "";
+        if (unifyPath == null) {
+            unifyPath = basePath;
+            if (!unifyPath)
+                unifyPath = path.join(process.cwd(), 'unify.json');
         }
-
-        grunt.verbose.write('Collecting bower dependencies from [')
-            .write(lib.bower.bowerFilepath)
-            .write(']...');
-        var deps = unique(getAllDependencies(lib));
-        grunt.verbose.ok();
-        var allTypings = deps
-            .reduce(function (agg, cur) {
-                return agg.concat(getTypings(basePath, cur.unify, false));
-            }, typings);
-        verboseTypings(allTypings);
-        return allTypings;
+        getAllTypings(basePath, unifyPath);
     };
 };
 
