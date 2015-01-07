@@ -12,6 +12,7 @@ module.exports = function (grunt) {
             .write(unify.path)
             .write(']...');
 
+        unify.loadSync();
         var typings = unify.getValue('typings') || [];
         if (isSelf) {
             typings = typings.concat(unify.getValue('devTypings') || []);
@@ -45,7 +46,6 @@ module.exports = function (grunt) {
         unifyPath = unifyPath == null ? basePath : unifyPath;
         var unifyDir = unifyPath == null ? process.cwd() : unifyPath;
         var unify = new JsonFile(path.join(unifyDir, 'unify.json'));
-        unify.loadSync();
 
         var typings = getTypings(basePath, unify, true);
 
