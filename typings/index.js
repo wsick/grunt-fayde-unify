@@ -10,7 +10,7 @@ module.exports = function (grunt) {
         grunt.verbose
             .write('Collecting typings from [')
             .write(unify.path)
-            .writeln(']...');
+            .write(']...');
 
         var typings = unify.getValue('typings') || [];
         if (isSelf) {
@@ -61,11 +61,12 @@ module.exports = function (grunt) {
         grunt.verbose.write('Collecting bower dependencies from [')
             .write(lib.bower.bowerFilepath)
             .write(']...');
-        var allTypings = unique(getAllDependencies(lib))
+        var deps = unique(getAllDependencies(lib));
+        grunt.verbose.ok();
+        var allTypings = deps
             .reduce(function (agg, cur) {
                 return agg.concat(getTypings(basePath, cur.unify, false));
             }, typings);
-        grunt.verbose.ok();
         verboseTypings(allTypings);
         return allTypings;
     };
