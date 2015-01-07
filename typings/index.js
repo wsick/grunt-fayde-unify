@@ -17,9 +17,11 @@ module.exports = function (grunt) {
             typings = typings.concat(unify.getValue('devTypings') || []);
         }
         var unifyDir = path.resolve(path.dirname(unify.path));
-        return typings.map(function (typing) {
+        var rv = typings.map(function (typing) {
             return path.relative(basePath, path.join(unifyDir, typing));
         });
+        grunt.verbose.ok();
+        return rv;
     }
 
     function getAllDependencies(sourceLib, lib) {
@@ -58,11 +60,12 @@ module.exports = function (grunt) {
 
         grunt.verbose.write('Collecting bower dependencies from [')
             .write(lib.bower.bowerFilepath)
-            .writeln(']...');
+            .write(']...');
         var allTypings = unique(getAllDependencies(lib))
             .reduce(function (agg, cur) {
                 return agg.concat(getTypings(basePath, cur.unify, false));
             }, typings);
+        grunt.verbose.ok();
         verboseTypings(allTypings);
         return allTypings;
     };
@@ -70,8 +73,8 @@ module.exports = function (grunt) {
 
 function unique(arr) {
     return arr.reduce(function (agg, cur) {
-        if (agg.indexOf(cur.name) > -1)
-            return agg;
-        return agg.concat([cur]);
+        return (agg.some(function (check) {
+            return check.name === cur.name;
+        })) ? agg : agg.concat([cur]);
     }, []);
 }
