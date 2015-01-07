@@ -1,5 +1,5 @@
 # grunt-fayde-unify
-Grunt tasks for fayde unify
+Grunt tasks for [fayde unify](https://github.com/bsick7/fayde-unify).
 
 ## typings
 
