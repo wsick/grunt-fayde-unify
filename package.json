@@ -1,6 +1,6 @@
 {
   "name": "grunt-fayde-unify",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Grunt tasks for fayde unify",
   "main": "index.js",
   "scripts": {
@@ -22,6 +22,6 @@
   },
   "homepage": "https://github.com/BSick7/grunt-fayde-unify",
   "dependencies": {
-    "fayde-unify": "git://github.com/bsick7/fayde-unify"
+    "fayde-unify": "^0.1.0"
   }
 }
