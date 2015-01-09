@@ -1,7 +1,20 @@
 # grunt-fayde-unify
-Grunt tasks for [fayde unify](https://github.com/bsick7/fayde-unify).
 
-## typings
+This is a tool for extracting unify metadata for Grunt. For more information about unify, see [fayde unify](https://github.com/bsick7/fayde-unify).
+
+## Usage
+
+To use, `grunt` variable must be injected.
+
+```
+var gunify = require('grunt-fayde-unify');
+
+module.exports = function (grunt) {
+    var unify = gunify(grunt);
+};
+```
+
+### typings
 
 `typings(config)`
 - config (optional)
