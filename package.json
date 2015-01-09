@@ -1,6 +1,6 @@
 {
   "name": "grunt-fayde-unify",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Grunt tasks for fayde unify",
   "main": "index.js",
   "scripts": {
