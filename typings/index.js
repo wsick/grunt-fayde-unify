@@ -1,7 +1,5 @@
-var fs = require('fs'),
-    path = require('path'),
+var path = require('path'),
     unify = require('fayde-unify'),
-    renderer = unify.renderer,
     JsonFile = unify.JsonFile,
     Library = unify.Library;
 
@@ -10,17 +8,18 @@ module.exports = function (grunt) {
         var unify = new JsonFile(config.unifyPath);
         var typings = getTypings(config.basePath, unify, !!config.includeSelf, !!config.includeDevSelf);
 
-        var lib = new Library(unify, new renderer.Standard());
-        if (!fs.existsSync(lib.bower.bowerFilepath)) {
+        var lib = new Library(unify);
+        var bowerFile = lib.bower.file;
+        if (!bowerFile.exists) {
             grunt.verbose.write('Could not find bower file [')
-                .write(lib.bower.bowerFilepath)
+                .write(bowerFile.path)
                 .writeln('].');
             verboseTypings(typings);
             return typings;
         }
 
         grunt.verbose.write('Collecting bower dependencies from [')
-            .write(lib.bower.bowerFilepath)
+            .write(bowerFile.path)
             .write(']...');
         var deps = unique(getAllDependencies(lib));
         grunt.verbose.ok();
@@ -60,8 +59,7 @@ module.exports = function (grunt) {
     }
 
     function getAllDependencies(sourceLib, lib) {
-        lib = lib || sourceLib;
-        return lib.bower.getDependenciesSync()
+        return (lib || sourceLib).dependencies.lib()
             .reduce(function (agg, cur) {
                 var curlib = sourceLib.createDependent(cur);
                 agg.push(curlib);
