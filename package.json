@@ -1,6 +1,6 @@
 {
   "name": "grunt-fayde-unify",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Grunt tasks for fayde unify",
   "main": "index.js",
   "scripts": {
@@ -8,19 +8,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/BSick7/grunt-fayde-unify.git"
+    "url": "git://github.com/wsick/grunt-fayde-unify.git"
   },
   "keywords": [
     "fayde",
     "unify",
     "grunt"
   ],
-  "author": "BSick7 <brad.sickles@gmail.com>",
+  "authors": [
+    "BSick7 <brad.sickles@gmail.com>"
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/BSick7/grunt-fayde-unify/issues"
+    "url": "https://github.com/wsick/grunt-fayde-unify/issues"
   },
-  "homepage": "https://github.com/BSick7/grunt-fayde-unify",
+  "homepage": "https://github.com/wsick/grunt-fayde-unify",
   "dependencies": {
     "fayde-unify": "~0.4.0"
   }
